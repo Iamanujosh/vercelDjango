@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Your Style!!</title>
+  <style>
+    /* General Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      background-color: #c0d7d5;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      font-size: 24px;
+      color: #1a6db3;
+    }
+
+    nav ul {
+      list-style-type: none;
+      display: flex;
+    }
+
+    nav ul li {
+      margin-left: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    nav ul li a:hover {
+      color: #1a6db3;
+    }
+
+    /* Main Content */
+    .main-content {
+      max-width: 900px;
+      margin: 40px auto;
+      text-align: center;
+    }
+
+    .main-content img {
+      width: 100%;
+      height: auto;
+      max-width: 600px;
+      margin: 20px 0;
+    }
+
+    .main-content h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    .main-content p {
+      margin-bottom: 20px;
+      text-align: justify;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      background-color: #f5f5f5;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+      }
+      nav ul {
+        flex-direction: column;
+      }
+      nav ul li {
+        margin-left: 0;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <h1>Style Bro</h1>
+    <nav>
+      <ul>
+        <li><a href="{%url 'home' %}">Home</a></li>
+      <li><a href="{% url 'login' %}">Login</a></li>
+      <li><a href="{% url 'signup' %}">Signup</a></li>
+      <li><a href="{% url 'profile' %}">Profile</a></li>
+      <li><a href="{% url 'chatbot' %}">Chatbot</a></li>
+      <li><a href="{% url 'wardrobe' %}">Wardrobe</a></li>
+      <li><a href="{% url 'user_quiz' %}">Take quiz</a></li>
+
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h2>Easy Wardrobe!</h2>
+    <img src="{% static 'images/home.jpg' %}" alt="How to Find Your Personal Style">
+    
+    <p>
+      On the journey to becoming your best-dressed self, the hardest part is often something that sounds simple on the surface: figuring out your personal style. Despite the endless inspiration at your fingertips, the infinite number of outfit possibilities can be overwhelming. Maybe you like a little bit of everything and don't know where to start—or the judgmental style gods have bestowed their wrath upon you.
+    </p>
+
+    <p>
+      Yes, figuring out your style can feel overwhelming, but it's also together!
+    </p>
+
+    <p>
+      To make the process easier, we’ve teamed up with Stitch Fix stylists and a curated lineup of fashion editors to build the ultimate guide for unlocking your own sense of style. This guide will help you pinpoint the types of pieces that resonate with your own personal style, as well as how to blend your look with current fashion trends. Here’s how to embark on your own journey of style.
+    </p>
+
+    <p>
+      Ready to dig into the depths of your closet and craft a capsule wardrobe? Whether you’re identifying your style through category-based Stitch Fix style quizzes, downloading your personal fashion mood board, or taking cues from expert stylists—this multi-layered wardrobe will unlock your fashion potential.
+    </p>
+    
+    <p>
+      To identify your personal style and build on it, a Stitch Fix stylist creates a list of wardrobe items specifically curated for you. Together with style experts, you can build out your wardrobe, organize your accessories, and style your fits for any occasion.
+    </p>
+
+  </div>
+
+  <!-- Footer Section -->
+  <footer>
+    &copy; 2024 Stitch Fix - All Rights Reserved
+  </footer>
+
+</body>
+</html>

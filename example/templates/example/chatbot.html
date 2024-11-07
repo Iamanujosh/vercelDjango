@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Bot</title>
+    <style>
+          body {
+            background-image: url('https://m.media-amazon.com/images/I/813sZhB2AeL._AC_UF894,1000_QL80_.jpg'); /* Replace with your background image URL */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the background image */
+            color: #4F4F4F; /* Darker text for contrast */
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+
+        header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            border-bottom: 2px solid #A87CA0; /* Stylish border */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #A87CA0;
+        }
+
+        .hamburger {
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #A87CA0;
+        }
+
+        .nav-links {
+            display: none;
+            position: absolute;
+            top: 60px;
+            background-color: #F6E7E8; /* Light beige */
+            border-radius: 5px;
+            list-style: none;
+            padding: 10px;
+            width: 150px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links li {
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #6A6A6A;
+            font-weight: bold;
+        }
+
+        .chat-container {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: scroll;
+            padding: 10px;
+            background-color: #eae8e1; /* Light beige */
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #4F4F4F;
+        }
+
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .message.user {
+            background-color: #d8f3dc; /* Light green */
+            color: #4F4F4F;
+            text-align: right;
+        }
+
+        .message.bot {
+            background-color: #f9f3f3; /* Light pink */
+            color: #4F4F4F;
+            text-align: left;
+            border: 1px solid #D1D1D1; /* Light border for contrast */
+        }
+
+        .chat-input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-input input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+            background-color: #fdf6e3; /* Very light beige */
+        }
+
+        .chat-input button {
+            background-color: #A87CA0; /* Fashionable color */
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            width: 80px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chat-input button:hover {
+            background-color: #A67CA0; /* Darker shade on hover */
+        }
+
+        .custom-file-upload {
+            background-color: #A87CA0; /* Fashionable color */
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 8px 16px;
+            text-align: center;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #A67CA0; /* Darker shade on hover */
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <button class="hamburger" onclick="toggleMenu()">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'chatbot' %}">Chat with Bot</a></li>
+        </ul>
+    </header>
+
+    <div class="chat-container">
+        <h1>Chat with StyleBro</h1>
+        <div class="chat-messages" id="chatMessages">
+            {{example_message | safe }}
+        </div>
+        <form class="chat-input" method="POST" id="chatForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="user_input" id="user_input" placeholder="Type your message here" autocomplete="off"><br>
+            <button type="submit">Send</button>
+            <label class="custom-file-upload" for="fileInput">Upload Image</label>
+            <input type="file" id="fileInput" hidden>
+        </form>
+    </div>
+
+
+    <script>
+         function toggleMenu() {
+            var navLinks = document.getElementById("navLinks");
+            if (navLinks.classList.contains("show")) {
+                navLinks.classList.remove("show");
+            } else {
+                navLinks.classList.add("show");
+            }
+        }
+
+        document.getElementById("chatForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent page refresh
+
+            const userInput = document.getElementById("user_input").value;
+            const userImg = document.getElementById("fileInput").files[0];
+            const chatMessages = document.getElementById("chatMessages");
+
+            if (!userInput && !userImg) {
+                return; // Do nothing if both inputs are empty
+            }
+
+            // Create a new FormData object
+            const formData = new FormData();
+            formData.append("user_input", userInput); // Add user input to FormData
+            if (userImg) {
+                formData.append("image", userImg); // Add image to FormData
+            }
+
+            // Append user message to chat
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user");
+            userMessage.innerHTML = `<strong>You:</strong> ${userInput}`;
+            chatMessages.appendChild(userMessage);
+
+            // Show uploaded image in chat if available
+            if (userImg) {
+                userMessage.innerHTML += `<br><img src="${URL.createObjectURL(userImg)}" alt="Uploaded Image" style="max-width: 100px;">`;
+            }
+
+            // Scroll to the bottom of the chat box
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Send the user input and image to the server using AJAX (Fetch API)
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch("", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken
+                },
+                body: formData // Send FormData object
+            })
+            .then(response => response.json())
+                .then(data => {
+                    // Append bot's response to chat
+                    const botMessage = document.createElement("div");
+                    botMessage.classList.add("message", "bot");
+                    const htmlContent = DOMPurify.sanitize(marked.parse(data.bot_response));
+                    botMessage.innerHTML = `<strong>Bot:</strong> ${htmlContent}`;
+                    chatMessages.appendChild(botMessage);
+
+
+                    // Clear the input field
+                    document.getElementById("user_input").value = "";
+
+                    // Scroll to the bottom of the chat box
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+
+            document.getElementById("user_input").value = '';
+            document.getElementById("fileInput").value = '';
+        });
+    </script>
+</body>
+</html>
