@@ -20,8 +20,8 @@ comtypes==1.4.5
 contourpy==1.2.1
 cryptography==43.0.3
 cycler==0.12.1
-dataset==1.6.2
-datasets @ file:///C:/Windows/System32/datasets
+# dataset==1.6.2
+# datasets @ file:///C:/Windows/System32/datasets
 decorator==5.1.1
 dill==0.3.8
 Django==5.1
